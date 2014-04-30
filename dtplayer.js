@@ -8,7 +8,7 @@ var refstruct = require('ref-struct');
 var dt_int = ref.types.int;
 var dt_int64 = ref.types.int64;
 var dt_char = ref.types.char;
-
+var voidptr = ref.refType(ref.types.void);
 // structure def
 var dtp_state = refstruct(
 {
@@ -53,6 +53,7 @@ var dtplib =ffi.Library('vendor/linux_x64/libdtp',
 {
     "player_register_all":['void',[]],
     "dtplayer_init":['pointer',[dtp_para_ptr]],
+    "dtplayer_start":['int',[voidptr]],
 }
 );
 
@@ -66,4 +67,5 @@ para.update_cb = dtp_cb;
 console.log("file name:%s ",para.file_name);
 
 dtplib.player_register_all();
-var priv = dtplib.dtplayer_init(para.ref());
+var dtp = dtplib.dtplayer_init(para.ref());
+dtplib.dtplayer_start(dtp);
