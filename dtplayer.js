@@ -42,7 +42,9 @@ var dtp_para_ptr = ref.refType(dtp_para);
 // callback def
 var cb = function(state)
 {
-    console.log("cur time: %lld",state.cur_time);
+    console.log("cur time:" + state.deref().cur_time);
+    console.log("status:" + state.deref().cur_status);
+    console.log("last status:" + state.deref().last_status);
 }
 var dtp_cb = ffi.Callback('void',[dtp_state_ptr],cb);
 
