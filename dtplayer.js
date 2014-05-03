@@ -3,6 +3,8 @@
 var ref = require('ref');
 var ffi = require('ffi');
 var refstruct = require('ref-struct');
+//var ex_ao = require("ex_ao");
+//var ex_vo = require("ex_vo");
 
 // type def
 var dt_int = ref.types.int;
@@ -34,7 +36,7 @@ var dtp_para = refstruct(
     sync_enable:dt_int,
     width:dt_int,
     height:dt_int,
-    update_cb:dtp_state_ptr
+    update_cb:voidptr
 }
 );
 var dtp_para_ptr = ref.refType(dtp_para);
@@ -49,10 +51,12 @@ var cb = function(state)
 var dtp_cb = ffi.Callback('void',[dtp_state_ptr],cb);
 
 // open shared lib
-var dtplib =ffi.Library('vendor/linux_x64/libdtp',
+var dtplib =ffi.Library('vendor/linux_x86/libdtp',
 {
     "player_register_all":['void',[]],
-    "dtplayer_init":['pointer',[dtp_para_ptr]],
+	"register_ext_ao":['void',[voidptr]],
+	"register_ext_vo":['void',[voidptr]],
+	"dtplayer_init":['pointer',[dtp_para_ptr]],
     "dtplayer_start":['int',[voidptr]],
 }
 );

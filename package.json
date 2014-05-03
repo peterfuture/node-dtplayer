@@ -1,0 +1,37 @@
+{
+  "name": "dtplayer",
+  "version": "1.0.0",
+  "description": "Streams2, a user-land copy of the stream library from Node.js v0.10.x",
+  "main": "index.js",
+  "dependencies": {
+    "ref": "*",
+    "ref-struct": "*",
+    "ffi": "*",
+    "speaker": "*"
+  },
+  "devDependencies": {
+  },
+  "scripts": {
+    "test": "tap test/simple/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/peterfuture/node-dtplayer.git"
+  },
+  "keywords": [
+    "dtplayer",
+    "ffmpeg"
+  ],
+  "browser": {
+    "util": false
+  },
+  "author": {
+    "name": "peter",
+    "email": "peter_future@outlook.com",
+    "url": "https://github.com/peterfuture/node-dtplayer.git"
+  },
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "_id": "dtplayer@1.0.0",
+  "_from": "dtplayer@1.0.0"
+}
