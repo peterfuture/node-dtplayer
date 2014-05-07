@@ -57,7 +57,7 @@ var cb = function(state)
 var dtp_cb = ffi.Callback('void',[dtp_state_ptr],cb);
 */
 // open shared lib
-var dtplib =ffi.Library('vendor/linux_x64/libdtp',
+var dtplib =ffi.Library('vendor/linux_x86/libdtp',
 {
     "player_register_all":['void',[]],
 	"register_ext_ao":['void',[voidptr]],
@@ -79,7 +79,6 @@ function dtplayer(p)
 {
     var para = p;
     var priv;
-
     // callback def
     var dtp_cb = ffi.Callback('void',[dtp_state_ptr],function(state)
     {
@@ -87,7 +86,7 @@ function dtplayer(p)
         console.log("status:" + state.deref().cur_status);
         console.log("last status:" + state.deref().last_status);
     });
-    para.update_cb = dtp_cb;
+  	para.update_cb = dtp_cb;
     
     this.bindEvents();
     events.EventEmitter.call(this);
@@ -96,22 +95,22 @@ function dtplayer(p)
 
 util.inherits(dtplayer, events.EventEmitter);
 
-
 //start play one file
 /*
  * start playing file stored in para
  *
  * */
 
-dtplayer.prototype.play = function()
+dtplayer.prototype.start = function()
 {
     var self = this;
     
     dtplib.player_register_all();
+    //priv = dtplib.dtplayer_init.async(para.ref(),function(err,res){console.log('player exit')});
     priv = dtplib.dtplayer_init(para.ref());
-    dtplib.dtplayer_start(priv);
+    dtplib.dtplayer_start.async(priv,function(err,res){console.log('player exit')});
 
-    this.emit('playing');
+	dtplib.dtplayer_pause(priv);
 }
 
 dtplayer.prototype.pause = function()
@@ -169,7 +168,7 @@ para.height = 480;
 console.log("file name:%s ",para.file_name);
 
 var p = new dtplayer(para);
-p.play();
+p.start();
 
 /*
 dtplib.player_register_all();
