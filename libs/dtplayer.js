@@ -1,5 +1,6 @@
 // dtplayer.js
 
+var os = require('os');
 var ref = require('ref');
 var ffi = require('ffi');
 
@@ -9,8 +10,39 @@ var util = require('util');
 
 var voidptr = ref.refType(ref.types.void);
 
+console.log(os.platform() + os.arch());
+
+var dtpLibPath;
+if(os.platform() === 'linux')
+{
+    if(os.arch() === 'x64')
+        dtpLibPath = 'vendor/linux_x64/libdtp';
+    else
+        dtpLibPath = 'vendor/linux_x86/libdtp';
+}
+else if(os.platform() === 'win32')
+{
+    console.log("not support win32 yet");
+}
+else if(os.platform() === 'win64')
+{
+    console.log("not support win64 yet");
+}
+else if(os.platform() === 'darwin')
+{
+    console.log("not support mac yet");
+}
+
+
+
+
+if(!dtpLibPath)
+{
+    console.log('can not find dtp lib, quit \n');
+}
+
 // open shared lib
-var dtplib =ffi.Library('vendor/linux_x86/libdtp',
+var dtplib =ffi.Library(dtpLibPath,
 {
     "player_register_all":['void',[]],
 	"register_ext_ao":['void',[voidptr]],
