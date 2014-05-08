@@ -55,17 +55,41 @@ var dtp_cb = ffi.Callback('void',[dtp_state_ptr],function(state)
     console.log("last status:" + state.deref().last_status);
 	ply.emit('update_info');
 });
- 
-var para = new dtp_para();
-para.file_name = "../1.aac";
-para.no_audio = -1;
-para.no_video = -1;
-para.width = 720;
-para.width = 720;
-para.height = 480;
-para.update_cb = dtp_cb;
 
-console.log("file name:%s ",para.file_name);
+var url = process.argv[2];
+var no_audio = -1;
+var no_video = -1
+var width = 720;
+var height = 480;
+
+console.log(url);
+process.argv.forEach(function (val, index, array) {
+    switch(val)
+    {
+        case '-w':
+            width = val;
+            break;
+        case '-h':
+            height = val;
+            break;
+        case 'noaudio':
+            no_audio = val;
+            break;
+        case 'novideo':
+            no_video = val;
+            break;
+        default:
+            break;
+    }
+});
+
+var para = new dtp_para();
+para.file_name = url;
+para.no_audio = no_audio;
+para.no_video = no_video;
+para.width = width;
+para.height = height;
+para.update_cb = dtp_cb;
 
 ply.init(para);
 ply.start();

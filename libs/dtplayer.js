@@ -10,8 +10,6 @@ var util = require('util');
 
 var voidptr = ref.refType(ref.types.void);
 
-console.log(os.platform() + os.arch());
-
 var dtpLibPath;
 if(os.platform() === 'linux')
 {
@@ -32,9 +30,6 @@ else if(os.platform() === 'darwin')
 {
     console.log("not support mac yet");
 }
-
-
-
 
 if(!dtpLibPath)
 {
