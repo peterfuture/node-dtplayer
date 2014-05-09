@@ -53,7 +53,7 @@ var dtp_cb = ffi.Callback('void',[dtp_state_ptr],function(state)
     console.log("cur time:" + state.deref().cur_time);
     console.log("status:" + state.deref().cur_status);
     console.log("last status:" + state.deref().last_status);
-	ply.emit('update_info');
+    ply.emit('update_info');
 });
 
 var url = process.argv[2];

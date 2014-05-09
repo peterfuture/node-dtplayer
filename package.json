@@ -1,7 +1,7 @@
 {
   "name": "dtplayer",
-  "version": "1.0.0",
-  "description": "Streams2, a user-land copy of the stream library from Node.js v0.10.x",
+  "version": "0.1.0",
+  "description": "addon for dtplayer",
   "main": "index.js",
   "dependencies": {
     "ref": "*",
@@ -34,6 +34,6 @@
   },
   "license": "MIT",
   "readmeFilename": "README.md",
-  "_id": "dtplayer@1.0.0",
-  "_from": "dtplayer@1.0.0"
+  "_id": "dtplayer@0.1.0",
+  "_from": "dtplayer@0.1.0"
 }

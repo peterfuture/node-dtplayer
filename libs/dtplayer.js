@@ -69,8 +69,9 @@ util.inherits(dtplayer, events.EventEmitter);
 
 dtplayer.prototype.init = function(p)
 {
-    var self = this;
 	this.para = p;
+    dtplib.player_register_all();
+    this.priv = dtplib.dtplayer_init(this.para.ref());
 }
 
 
@@ -81,13 +82,8 @@ dtplayer.prototype.init = function(p)
  * */
 dtplayer.prototype.start = function()
 {
-    var self = this;
-    
-    dtplib.player_register_all();
-    this.priv = dtplib.dtplayer_init(this.para.ref());
+    //dtplib.dtplayer_start.async(this.priv,function(err,res){console.log('play end' + err)});
     dtplib.dtplayer_start(this.priv);
-	
-	this.emit('playing');	
 }
 
 dtplayer.prototype.pause = function()
