@@ -22,6 +22,7 @@ var dtp_state = Struct(
     last_status:dt_int,
     cur_time_ms:dt_int64,
     cur_time:dt_int64,
+    full_time:dt_int64,
     start_time:dt_int64
 }
 );
@@ -45,15 +46,57 @@ var dtp_para = Struct(
 );
 var dtp_para_ptr = ref.refType(dtp_para);
 
+
+var player_status = {
+    PLAYER_STATUS_INVALID:   -1,
+    PLAYER_STATUS_IDLE:       0,
+    
+    PLAYER_STATUS_INIT_ENTER: 1,
+    PLAYER_STATUS_INIT_EXIT:  2,
+
+    PLAYER_STATUS_START:      3,
+    PLAYER_STATUS_RUNNING:    4,
+
+    PLAYER_STATUS_PAUSED:     5,
+    PLAYER_STATUS_RESUME:     6,
+    PLAYER_STATUS_SEEK_ENTER: 7,
+    PLAYER_STATUS_SEEK_EXIT:  8,
+
+    PLAYER_STATUS_ERROR:      9,
+    PLAYER_STATUS_STOP:      10,
+    PLAYER_STATUS_PLAYEND:   11,
+    PLAYER_STATUS_EXIT:      12
+};
+
 var ply = new dtplayer();
 
 var dtp_cb = ffi.Callback('void',[dtp_state_ptr],function(state)
 {
 	var info = state.deref();
-    console.log("cur time:" + state.deref().cur_time);
-    console.log("status:" + state.deref().cur_status);
-    console.log("last status:" + state.deref().last_status);
-    ply.emit('update_info');
+    //ply.emit('update_info');
+
+    var sta;
+    switch(info.cur_status){
+        case player_status.PLAYER_STATUS_EXIT:
+             sta = '-exit-';
+             break;
+        case player_status.PLAYER_STATUS_RUNNING:
+             sta = '-playing-';
+             break;
+        case player_status.PLAYER_EVENT_PAUSE:
+             sta = '-pause-';
+             break;
+        case player_status.PLAYER_STATUS_SEEK_ENTER:
+             sta = '-seeking-';
+             break
+        default:
+             return '-unkown-';
+    };
+
+    console.log('cur time(s):' + info.cur_time + '  status:' + sta + '  full time:' + info.full_time);
+
+    if(info.cur_status == player_status.PLAYER_STATUS_EXIT)
+        ply.emit('play_end');
 });
 
 var url = process.argv[2];
@@ -72,10 +115,10 @@ process.argv.forEach(function (val, index, array) {
         case '-h':
             height = val;
             break;
-        case 'noaudio':
+        case '-noaudio':
             no_audio = val;
             break;
-        case 'novideo':
+        case '-novideo':
             no_video = val;
             break;
         default:

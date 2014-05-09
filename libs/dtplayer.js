@@ -59,7 +59,8 @@ function dtplayer()
 {
     var para;
     var priv;
-    
+    var beat_timer;
+
     this.bindEvents();
     events.EventEmitter.call(this);
     console.log('[node-js] : dtplayer constructer');
@@ -74,6 +75,19 @@ dtplayer.prototype.init = function(p)
     this.priv = dtplib.dtplayer_init(this.para.ref());
 }
 
+dtplayer.prototype.startTimer = function()
+{
+    this.beat_timer = setInterval(function()
+    {
+        // do nothing
+    },1000); // exec 1/1s
+}
+
+dtplayer.prototype.stopTimer = function()
+{
+    if(beat_timer)
+        clearInterval(beat_timer);
+}
 
 //start play one file
 /*
@@ -84,6 +98,7 @@ dtplayer.prototype.start = function()
 {
     //dtplib.dtplayer_start.async(this.priv,function(err,res){console.log('play end' + err)});
     dtplib.dtplayer_start(this.priv);
+    this.emit('playing');
 }
 
 dtplayer.prototype.pause = function()
@@ -108,7 +123,6 @@ dtplayer.prototype.seek = function()
  * */
 dtplayer.prototype.stop = function()
 {
-    
     return 0;
 }
 
@@ -119,11 +133,19 @@ dtplayer.prototype.stop = function()
  * */
 dtplayer.prototype.bindEvents = function()
 {
-    this.on('playing',function(){console.log("receive playing signal")});
+    this.on('playing',function(){
+        console.log("start playing");
+        this.startTimer(); 
+    });
+    
     this.on('update_info',function()
     {
-		console.log('update info occured');
+		//console.log('update info occured');
     }        
     );
-
+    
+    this.on('play_end',function(){
+        this.stopTimer();
+    }
+    );
 }
