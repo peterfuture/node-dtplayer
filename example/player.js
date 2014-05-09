@@ -110,21 +110,22 @@ process.argv.forEach(function (val, index, array) {
     switch(val)
     {
         case '-w':
-            width = val;
+            width = process.argv[index+1];
             break;
         case '-h':
-            height = val;
+            height = process.argv[index+1];
             break;
         case '-noaudio':
-            no_audio = val;
+            no_audio = process.argv[index+1];
             break;
         case '-novideo':
-            no_video = val;
+            no_video = process.argv[index+1];
             break;
         default:
             break;
     }
 });
+
 
 var para = new dtp_para();
 para.file_name = url;
