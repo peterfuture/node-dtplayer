@@ -37,6 +37,7 @@ if(!dtpLibPath)
 }
 
 // open shared lib
+console.log('load so :'+dtpLibPath);
 var dtplib =ffi.Library(dtpLibPath,
 {
     "player_register_all":['void',[]],
@@ -44,11 +45,13 @@ var dtplib =ffi.Library(dtpLibPath,
 	"register_ext_vo":['void',[voidptr]],
 	"dtplayer_init":['pointer',[voidptr]],
     "dtplayer_start":['int',[voidptr]],
+    "dtplayer_pause":['int',[voidptr]],
+    "dtplayer_resume":['int',[voidptr]],
+    "dtplayer_seek":['int',[voidptr,'int']],
+    "dtplayer_stop":['int',[voidptr]],
 }
 );
 
-
-module.exports = dtplayer;
 
 function errHandler(err) {
     if (err) throw err;
@@ -68,13 +71,6 @@ function dtplayer()
 
 util.inherits(dtplayer, events.EventEmitter);
 
-dtplayer.prototype.init = function(p)
-{
-	this.para = p;
-    dtplib.player_register_all();
-    this.priv = dtplib.dtplayer_init(this.para.ref());
-}
-
 dtplayer.prototype.startTimer = function()
 {
     this.beat_timer = setInterval(function()
@@ -85,15 +81,17 @@ dtplayer.prototype.startTimer = function()
 
 dtplayer.prototype.stopTimer = function()
 {
-    if(beat_timer)
-        clearInterval(beat_timer);
+    if(this.beat_timer)
+        clearInterval(this.beat_timer);
 }
 
-//start play one file
-/*
- * start playing file stored in para
- *
- * */
+dtplayer.prototype.init = function(p)
+{
+	this.para = p;
+    dtplib.player_register_all();
+    this.priv = dtplib.dtplayer_init(this.para.ref());
+}
+
 dtplayer.prototype.start = function()
 {
     //dtplib.dtplayer_start.async(this.priv,function(err,res){console.log('play end' + err)});
@@ -103,34 +101,24 @@ dtplayer.prototype.start = function()
 
 dtplayer.prototype.pause = function()
 {
-    return 0;
+    dtplib.dtplayer_pause(this.priv);
 }
 
 dtplayer.prototype.resume = function()
 {
-    return 0;
+    dtplib.dtplayer_resume(this.priv);
 }
 
-dtplayer.prototype.seek = function()
+dtplayer.prototype.seek = function(pos)
 {
-    return 0;
+    dtplib.dtplayer_seek(this.priv,pos);
 }
 
-/*
- * stop playing and unpipe stream.
- * No params for now
- *
- * */
 dtplayer.prototype.stop = function()
 {
-    return 0;
+    dtplib.dtplayer_stop(this.priv);
 }
 
-/*
- * Bind some useful events
- * @events.playing: on playing, keeping play history up to date. 
- *
- * */
 dtplayer.prototype.bindEvents = function()
 {
     this.on('playing',function(){
@@ -145,7 +133,11 @@ dtplayer.prototype.bindEvents = function()
     );
     
     this.on('play_end',function(){
-        this.stopTimer();
+		console.log('player end events occured ');
+		this.stopTimer();
+		process.exit();
     }
     );
 }
+
+module.exports = dtplayer;

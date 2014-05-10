@@ -15,6 +15,7 @@ var dt_int = ref.types.int;
 var dt_int64 = ref.types.int64;
 var dt_char = ref.types.char;
 var voidptr = ref.refType(ref.types.void);
+
 // structure def
 var dtp_state = Struct(
 {
@@ -45,7 +46,6 @@ var dtp_para = Struct(
 }
 );
 var dtp_para_ptr = ref.refType(dtp_para);
-
 
 var player_status = {
     PLAYER_STATUS_INVALID:   -1,
@@ -105,7 +105,6 @@ var no_video = -1
 var width = 720;
 var height = 480;
 
-console.log(url);
 process.argv.forEach(function (val, index, array) {
     switch(val)
     {
@@ -138,3 +137,29 @@ para.update_cb = dtp_cb;
 ply.init(para);
 ply.start();
 
+//read cmd from stdin
+var stdin = process.openStdin();
+process.stdin.setRawMode(true);
+process.stdin.resume();
+
+stdin.on('data',function(trunk){
+	process.stdout.write('get key:' + trunk + '\n');
+	//console.log('get key:'+trunk);
+	if(trunk == 'q')
+	{
+		ply.stop();
+	}else if(trunk == 'p')
+	{
+		ply.pause();
+	}else if(trunk == '+')
+	{
+		ply.seek(60);
+	}
+	else if(trunk == '-')
+	{
+		ply.seek(-60);
+	}
+	else
+		console.log('invalid cmd: '+trunk);
+}
+);
