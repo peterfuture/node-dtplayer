@@ -11,16 +11,15 @@ var voidptr = ref.refType(ref.types.void); // void *
 var DTAO = require('./audio');
 var dtao = new DTAO();
 
-var DTVO = require('./video');
-var dtvo = new DTVO();
+//var DTVO = require('./video');
+//var dtvo = new DTVO();
 
 //=========================================
-// EX VO
 
 function EX_AO()
 {
-    var id;
-    var name;
+    var id = 0;
+    var name = 'EX AO';
     var ao_priv;
     var next;
     var para;
@@ -92,18 +91,5 @@ para.avctx_priv = null;
 
 ao.ao_init(para);
 */
-
-
-
-
-
-//=========================================
-// EX VO
-
-
-
-
-
-
 
 
