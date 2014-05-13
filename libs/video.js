@@ -32,39 +32,28 @@ var pic_t = Struct(
 );
 pic_ptr = ref.refType(pic_t);
 
-
-/*
-function EX_VO()
-{
-	var id;
-	var name;
-	this.handle = null;
-	this.next = null;
-	this.vo_priv = null;
-}*/
-
 var vo_ex_init = ffi.Callback('int',[],function()
 {
-	console.log('init');
-	return 0;	
+	console.log('nodejs - ex vo init');
+    return 0;
 });
 
 var vo_ex_stop = ffi.Callback('int',[],function()
 {
-	console.log('stop');
+	console.log('nodejs - ex vo stop');
 	return 0;	
 });
 
-var vo_ex_render = ffi.Callback('int',[pic_ptr],function(pic)
+var vo_ex_render = ffi.Callback('int',[voidptr],function(pic)
 {
-	console.log('render one frame');
+	console.log('nodejs- ex vo render one frame');
 	return 0;	
 });
 
 exports.getVO = function ()
 {
-	//var vo = new EX_VO();
-	var vo = ref.alloc(EX_VO)
+	var vo = new EX_VO();
+	//var vo = ref.alloc(EX_VO)
 	vo.id = 0;
 	vo.name = 'ex vo';
 	vo.vo_init = vo_ex_init;
@@ -78,6 +67,9 @@ exports.getVO = function ()
 var ex_vo = new EX_VO();
 ex_vo.id = 0;
 ex_vo.name = 'ex vo';
+ex_vo.vo_init = vo_ex_init;
+ex_vo.vo_stop = vo_ex_stop;
+ex_vo_vo_render = vo_ex_render;
 
 console.log(ex_vo.id);
 console.log(ex_vo.name);

@@ -8,8 +8,7 @@ var fs = require('fs');
 var events = require('events');
 var util = require('util');
 
-var EX_VO = require('./video.js');
-var ex_vo = EX_VO.getVO();
+var ex_vo = require('./video.js').getVO();
 
 console.log(ex_vo.id);
 console.log(ex_vo.name)
@@ -95,7 +94,7 @@ dtplayer.prototype.init = function(p)
 {
 	this.para = p;
     dtplib.player_register_all();
-	dtplib.register_ext_vo(ex_vo);
+	dtplib.register_ext_vo(ex_vo.ref());
     this.priv = dtplib.dtplayer_init(this.para.ref());
 }
 
