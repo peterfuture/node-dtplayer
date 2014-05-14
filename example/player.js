@@ -2,19 +2,11 @@
 var ref = require('ref');
 var ffi = require('ffi');
 var Struct = require('ref-struct');
-
-var fs = require('fs');
-var events = require('events');
-var async = require('async');
-var util = require('util');
-
 var dtplayer = require('../index.js');
 
 // type def
 var int64_t = ref.types.int64;
-var dt_char = ref.types.char;
 var voidptr = ref.refType(ref.types.void);
-var uint8_ptr = ref.refType(ref.types.uint8);
 
 // structure def
 var dtp_state = Struct(
@@ -84,7 +76,7 @@ var canvas_vo = {
     }
 };
 
-var ply = new dtplayer();
+var ply = null;
 var dtp_cb = ffi.Callback('void',[dtp_state_ptr],function(state)
 {
 	var info = state.deref();
@@ -110,7 +102,7 @@ var dtp_cb = ffi.Callback('void',[dtp_state_ptr],function(state)
 
     console.log('cur time(s):' + info.cur_time + '  status:' + sta + '  full time:' + info.full_time);
 
-    if(info.cur_status == player_status.PLAYER_STATUS_EXIT)
+    if(info.cur_status == player_status.PLAYER_STATUS_EXIT && ply)
         ply.emit('play_end');
 });
 
@@ -140,7 +132,7 @@ process.argv.forEach(function (val, index, array) {
     }
 });
 
-var para = new dtp_para();
+var para = new dtp_para;
 para.file_name = url;
 para.no_audio = no_audio;
 para.no_video = no_video;
@@ -148,6 +140,7 @@ para.width = width;
 para.height = height;
 para.update_cb = dtp_cb;
 
+ply = new dtplayer;
 //reg vo
 ply.reg_vo(canvas_vo);
 
