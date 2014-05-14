@@ -9,7 +9,9 @@ var int64_t = ref.types.int64;
 var intptr = ref.refType(ref.types.int);
 var uint8_ptr = ref.refType(ref.types.uint8);
 
-var EX_VO = Struct(
+var ext_vo = null; // user defined vo
+
+var dtvo = Struct(
 {
     id:'int',
     name:'string',
@@ -51,26 +53,39 @@ var picptr = ref.refType(pic_t);
 
 var vo_ex_init = ffi.Callback('int',[],function()
 {
-	console.log('nodejs - ex vo init');
+    if(ext_vo)
+        ext_vo.vo_init();
+    else
+	    console.log('nodejs - no ext vo, init do nothing');
     return 0;
 });
 
 var vo_ex_stop = ffi.Callback('int',[],function()
 {
-	console.log('nodejs - ex vo stop');
+    if(ext_vo)
+        ext_vo.vo_stop();
+    else
+	    console.log('nodejs - no ext vo, stop do nothing');
 	return 0;	
 });
 
 var vo_ex_render = ffi.Callback('int',[picptr],function(pic)
 {
-	console.log('nodejs- ex vo render one frame');
+    if(ext_vo)
+        ext_vo.vo_render(pic);
+    else
+	    console.log('nodejs- no ext vo, render do nothing');
 	return 0;	
 });
 
-exports.getVO = function ()
+exports.reg_vo = function(vo)
 {
-    var vo = new EX_VO();
-    //var vo = ref.alloc(EX_VO)
+    ext_vo = vo;
+}
+
+exports.getvo = function ()
+{
+    var vo = new dtvo();
     vo.id = 0;
     vo.name = 'ex vo';
     vo.vo_init = vo_ex_init;
@@ -82,17 +97,3 @@ exports.getVO = function ()
     vo.vo_priv = null;
     return vo;
 }
-
-//test
-/*
-var ex_vo = new EX_VO();
-ex_vo.id = 0;
-ex_vo.name = 'ex vo';
-ex_vo.vo_stop = vo_ex_stop;
-ex_vo_vo_render = vo_ex_render;
-
-console.log(ex_vo.id);
-console.log(ex_vo.name);
-//ex_vo.vo_init();
-//ex_vo.vo_stop();
-//ex_vo.vo_render();*/

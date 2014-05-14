@@ -11,20 +11,20 @@ var util = require('util');
 var dtplayer = require('../index.js');
 
 // type def
-var dt_int = ref.types.int;
-var dt_int64 = ref.types.int64;
+var int64_t = ref.types.int64;
 var dt_char = ref.types.char;
 var voidptr = ref.refType(ref.types.void);
+var uint8_ptr = ref.refType(ref.types.uint8);
 
 // structure def
 var dtp_state = Struct(
 {
-    cur_status:dt_int,
-    last_status:dt_int,
-    cur_time_ms:dt_int64,
-    cur_time:dt_int64,
-    full_time:dt_int64,
-    start_time:dt_int64
+    cur_status:'int',
+    last_status:'int',
+    cur_time_ms:int64_t,
+    cur_time:int64_t,
+    full_time:int64_t,
+    start_time:int64_t
 }
 );
 var dtp_state_ptr = ref.refType(dtp_state);
@@ -32,16 +32,16 @@ var dtp_state_ptr = ref.refType(dtp_state);
 var dtp_para = Struct(
 {
     file_name:'string',
-    video_index:dt_int,
-    audio_index:dt_int,
-    sub_index:dt_int,
-    loop_mode:dt_int,
-    no_audio:dt_int,
-    no_video:dt_int,
-    no_sub:dt_int,
-    sync_enable:dt_int,
-    width:dt_int,
-    height:dt_int,
+    video_index:'int',
+    audio_index:'int',
+    sub_index:'int',
+    loop_mode:'int',
+    no_audio:'int',
+    no_video:'int',
+    no_sub:'int',
+    sync_enable:'int',
+    width:'int',
+    height:'int',
     update_cb:voidptr
 }
 );
@@ -68,8 +68,23 @@ var player_status = {
     PLAYER_STATUS_EXIT:      12
 };
 
-var ply = new dtplayer();
+//reg vo
+var canvas_vo = {
+    id:1000,
+    name:'canvas render',
+    vo_init:function(){
+        console.log('yeah, canvas init ok');
+    },
+    vo_stop:function(){
+        console.log('yeah, canvas stop ok');
+    },
+    vo_render:function(pic){
+        var picture = pic.deref();
+        console.log('canvas render one frame, pts'+ picture.pts);
+    }
+};
 
+var ply = new dtplayer();
 var dtp_cb = ffi.Callback('void',[dtp_state_ptr],function(state)
 {
 	var info = state.deref();
@@ -125,7 +140,6 @@ process.argv.forEach(function (val, index, array) {
     }
 });
 
-
 var para = new dtp_para();
 para.file_name = url;
 para.no_audio = no_audio;
@@ -133,6 +147,9 @@ para.no_video = no_video;
 para.width = width;
 para.height = height;
 para.update_cb = dtp_cb;
+
+//reg vo
+ply.reg_vo(canvas_vo);
 
 ply.init(para);
 ply.start();
@@ -148,6 +165,8 @@ stdin.on('data',function(trunk){
 	if(trunk == 'q')
 	{
 		ply.stop();
+        process.exit();
+
 	}else if(trunk == 'p')
 	{
 		ply.pause();

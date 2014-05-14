@@ -8,10 +8,8 @@ var fs = require('fs');
 var events = require('events');
 var util = require('util');
 
-var ex_vo = require('./video.js').getVO();
-
-console.log(ex_vo.id);
-console.log(ex_vo.name)
+var dt_vo = require('./video.js');
+var ex_vo = dt_vo.getvo();
 
 var voidptr = ref.refType(ref.types.void);
 
@@ -124,6 +122,12 @@ dtplayer.prototype.stop = function()
 {
     dtplib.dtplayer_stop(this.priv);
 }
+
+dtplayer.prototype.reg_vo = function(vo)
+{
+    dt_vo.reg_vo(vo);
+}
+
 
 dtplayer.prototype.bindEvents = function()
 {
