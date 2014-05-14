@@ -7,9 +7,6 @@
     "ref": "*",
     "ref-struct": "*",
     "ffi": "*",
-    "speaker": "*",
-    "util": "*",
-    "async": "*"
   },
   "devDependencies": {
   },
