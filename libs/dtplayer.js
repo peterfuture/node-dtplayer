@@ -74,20 +74,6 @@ function dtplayer()
 
 util.inherits(dtplayer, events.EventEmitter);
 
-dtplayer.prototype.startTimer = function()
-{
-    this.beat_timer = setInterval(function()
-    {
-        // do nothing
-    },1000); // exec 1/1s
-}
-
-dtplayer.prototype.stopTimer = function()
-{
-    if(this.beat_timer)
-        clearInterval(this.beat_timer);
-}
-
 dtplayer.prototype.init = function(p)
 {
 	this.para = p;
@@ -133,7 +119,6 @@ dtplayer.prototype.bindEvents = function()
 {
     this.on('playing',function(){
         console.log("start playing");
-        this.startTimer(); 
     });
     
     this.on('update_info',function()
@@ -144,8 +129,7 @@ dtplayer.prototype.bindEvents = function()
     
     this.on('play_end',function(){
 		console.log('player end events occured ');
-		this.stopTimer();
-		process.exit();
+		//process.exit();
     }
     );
 }
