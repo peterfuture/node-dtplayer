@@ -72,7 +72,9 @@ var canvas_vo = {
     },
     vo_render:function(pic){
         var picture = pic.deref();
-        console.log('canvas render one frame, pts'+ picture.pts);
+        var data = picture.data0;
+        //console.log('data:'+data.deref()[0] + '--' + data.deref()[1]);
+        console.log('canvas render one frame, pts'+ picture.pts +" Y:"+picture.linesize0+ " U:"+picture.linesize1 + " V:"+picture.linesize2);
     }
 };
 
