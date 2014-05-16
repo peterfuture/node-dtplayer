@@ -61,6 +61,7 @@ var player_status = {
 };
 
 //reg vo
+
 var canvas_vo = {
     id:1000,
     name:'canvas render',
@@ -73,9 +74,10 @@ var canvas_vo = {
     vo_render:function(pic){
         var picture = pic.deref();
         var data = picture.data0;
-        //console.log('data:'+data.deref()[0] + '--' + data.deref()[1]);
-        console.log('canvas render one frame, pts'+ picture.pts +" Y:"+picture.linesize0+ " U:"+picture.linesize1 + " V:"+picture.linesize2);
+		var rgb_data = data.reinterpret(720*480*3)
+        console.log('canvas render one frame, pts'+ picture.pts +" width *3 ="+picture.linesize0 +"data size:"+rgb_data.length);
     }
+
 };
 
 var ply = null;
