@@ -17,9 +17,9 @@ var dtpLibPath;
 if(os.platform() === 'linux')
 {
     if(os.arch() === 'x64')
-        dtpLibPath = 'vendor/linux_x64/libdtp';
+        dtpLibPath = g_dtp + '/library/linux_x64/libdtp';
     else
-        dtpLibPath = 'vendor/linux_x86/libdtp';
+        dtpLibPath = g_dtp + '/library/linux_x86/libdtp';
 }
 else if(os.platform() === 'win32')
 {
@@ -37,6 +37,7 @@ else if(os.platform() === 'darwin')
 if(!dtpLibPath)
 {
     console.log('can not find dtp lib, quit \n');
+    process.exit();
 }
 
 // open shared lib

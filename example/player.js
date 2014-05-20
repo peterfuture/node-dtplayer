@@ -1,3 +1,6 @@
+//first set dt prebuild lib path
+g_dtp = process.cwd();
+
 //start player
 var ref = require('ref');
 var ffi = require('ffi');
@@ -75,7 +78,6 @@ var canvas_vo = {
         var picture = pic.deref();
         var data = picture.data0;
 		var rgb_data = data.reinterpret(720*480*3)
-        console.log('canvas render one frame, pts'+ picture.pts +" width *3 ="+picture.linesize0 +"data size:"+rgb_data.length);
     }
 
 };
