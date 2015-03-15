@@ -31,36 +31,43 @@ var dtp_para = Struct(
     audio_index:'int',
     sub_index:'int',
     loop_mode:'int',
-    no_audio:'int',
-    no_video:'int',
-    no_sub:'int',
-    sync_enable:'int',
+    disable_audio:'int',
+    disable_video:'int',
+    disable_sub:'int',
+    disable_avsync:'int',
+    disable_hw_acodec:'int',
+    disable_hw_vcodec:'int',
+    disable_hw_scodec:'int',
     width:'int',
     height:'int',
+    cookie:voidptr,
     update_cb:voidptr
 }
 );
 var dtp_para_ptr = ref.refType(dtp_para);
 
 var player_status = {
-    PLAYER_STATUS_INVALID:   -1,
-    PLAYER_STATUS_IDLE:       0,
+    PLAYER_STATUS_INVALID:       -1,
+    PLAYER_STATUS_IDLE:           0,
     
-    PLAYER_STATUS_INIT_ENTER: 1,
-    PLAYER_STATUS_INIT_EXIT:  2,
+    PLAYER_STATUS_INIT_ENTER:     1,
+    PLAYER_STATUS_INIT_EXIT:      2,
 
-    PLAYER_STATUS_START:      3,
-    PLAYER_STATUS_RUNNING:    4,
+    PLAYER_STATUS_PREPARE_START:  3,
+    PLAYER_STATUS_PREPARED:       4,
+    
+    PLAYER_STATUS_START:          5,
+    PLAYER_STATUS_RUNNING:        6,
 
-    PLAYER_STATUS_PAUSED:     5,
-    PLAYER_STATUS_RESUME:     6,
-    PLAYER_STATUS_SEEK_ENTER: 7,
-    PLAYER_STATUS_SEEK_EXIT:  8,
+    PLAYER_STATUS_PAUSED:         7,
+    PLAYER_STATUS_RESUME:         8,
+    PLAYER_STATUS_SEEK_ENTER:     9,
+    PLAYER_STATUS_SEEK_EXIT:      10,
 
-    PLAYER_STATUS_ERROR:      9,
-    PLAYER_STATUS_STOP:      10,
-    PLAYER_STATUS_PLAYEND:   11,
-    PLAYER_STATUS_EXIT:      12
+    PLAYER_STATUS_ERROR:          11,
+    PLAYER_STATUS_STOP:           12,
+    PLAYER_STATUS_PLAYEND:        13,
+    PLAYER_STATUS_EXIT:           14
 };
 
 //reg vo
@@ -140,8 +147,8 @@ process.argv.forEach(function (val, index, array) {
 
 var para = new dtp_para;
 para.file_name = url;
-para.no_audio = no_audio;
-para.no_video = no_video;
+para.disable_audio = no_audio;
+para.disable_video = no_video;
 para.width = width;
 para.height = height;
 para.update_cb = dtp_cb;
