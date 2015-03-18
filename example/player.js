@@ -19,7 +19,8 @@ var dtp_state = Struct(
     cur_time_ms:int64_t,
     cur_time:int64_t,
     full_time:int64_t,
-    start_time:int64_t
+    start_time:int64_t,
+    discontinue_point_ms:int64_t
 }
 );
 var dtp_state_ptr = ref.refType(dtp_state);
@@ -90,7 +91,7 @@ var canvas_vo = {
 };
 
 var ply = null;
-var dtp_cb = ffi.Callback('void',[dtp_state_ptr],function(state)
+var dtp_cb = ffi.Callback('int',[voidptr,dtp_state_ptr],function(cookie, state)
 {
 	var info = state.deref();
     //ply.emit('update_info');
@@ -110,13 +111,14 @@ var dtp_cb = ffi.Callback('void',[dtp_state_ptr],function(state)
              sta = '-seeking-';
              break
         default:
-             return '-unkown-';
+             return 0;
     };
 
     console.log('cur time(s):' + info.cur_time + '  status:' + sta + '  full time:' + info.full_time);
 
     if(info.cur_status == player_status.PLAYER_STATUS_EXIT && ply)
         ply.emit('play_end');
+    return 0;
 });
 
 var url = process.argv[2];

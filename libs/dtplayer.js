@@ -44,9 +44,8 @@ if(!dtpLibPath)
 console.log('load so :'+dtpLibPath);
 var dtplib =ffi.Library(dtpLibPath,
 {
-    "player_register_all":['void',[]],
-	"register_ext_ao":['void',[voidptr]],
-	"register_ext_vo":['void',[voidptr]],
+	"dtplayer_register_ext_ao":['void',[voidptr]],
+	"dtplayer_register_ext_vo":['void',[voidptr]],
 	"dtplayer_init":['pointer',[voidptr]],
     "dtplayer_start":['int',[voidptr]],
     "dtplayer_pause":['int',[voidptr]],
@@ -78,8 +77,7 @@ util.inherits(dtplayer, events.EventEmitter);
 dtplayer.prototype.init = function(p)
 {
 	this.para = p;
-    dtplib.player_register_all();
-	dtplib.register_ext_vo(ex_vo.ref());
+	dtplib.dtplayer_register_ext_vo(ex_vo.ref());
     this.priv = dtplib.dtplayer_init(this.para.ref());
 }
 
