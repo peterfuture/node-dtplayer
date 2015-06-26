@@ -119,13 +119,13 @@ dtplayer.prototype.bindEvents = function()
     this.on('playing',function(){
         console.log("start playing");
     });
-    
+
     this.on('update_info',function()
     {
 		//console.log('update info occured');
-    }        
+    }
     );
-    
+
     this.on('play_end',function(){
 		console.log('player end events occured ');
 		//process.exit();

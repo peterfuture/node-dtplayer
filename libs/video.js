@@ -15,12 +15,12 @@ var dtvo = Struct(
 {
     id:'int',
     name:'string',
-    
-	vo_init:voidptr,
+
+	  vo_init:voidptr,
     vo_stop:voidptr,
     vo_render:voidptr,
-    
-	handle:voidptr,
+
+	  handle:voidptr,
     next:voidptr,
     vo_priv:voidptr,
 }
@@ -44,6 +44,9 @@ var pic_t = Struct(
     linesize5:'int',
     linesize6:'int',
     linesize7:'int',
+    width:'int',
+    height:'int',
+    pixfmt:'int',
     pts:int64_t,
     dts:int64_t,
     duration:'int'
@@ -51,31 +54,31 @@ var pic_t = Struct(
 );
 var picptr = ref.refType(pic_t);
 
-var vo_ex_init = ffi.Callback('int',[],function()
+var vo_ex_init = ffi.Callback('int',[voidptr],function(p)
 {
     if(ext_vo)
-        ext_vo.vo_init();
+        ext_vo.vo_init(p);
     else
 	    console.log('nodejs - no ext vo, init do nothing');
     return 0;
 });
 
-var vo_ex_stop = ffi.Callback('int',[],function()
+var vo_ex_stop = ffi.Callback('int',[voidptr],function(p)
 {
     if(ext_vo)
-        ext_vo.vo_stop();
+        ext_vo.vo_stop(p);
     else
 	    console.log('nodejs - no ext vo, stop do nothing');
-	return 0;	
+	return 0;
 });
 
-var vo_ex_render = ffi.Callback('int',[picptr],function(pic)
+var vo_ex_render = ffi.Callback('int',[voidptr,picptr],function(p,pic)
 {
     if(ext_vo)
-        ext_vo.vo_render(pic);
+        ext_vo.vo_render(p,pic);
     else
 	    console.log('nodejs- no ext vo, render do nothing');
-	return 0;	
+	return 0;
 });
 
 exports.reg_vo = function(vo)
@@ -86,12 +89,12 @@ exports.reg_vo = function(vo)
 exports.getvo = function ()
 {
     var vo = new dtvo();
-    vo.id = 0;
+    vo.id = 1;
     vo.name = 'ex vo';
     vo.vo_init = vo_ex_init;
     vo.vo_stop = vo_ex_stop;
     vo.vo_render = vo_ex_render;
-    
+
     vo.handle = null;
     vo.next = null;
     vo.vo_priv = null;

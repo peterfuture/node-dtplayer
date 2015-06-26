@@ -51,13 +51,13 @@ var dtp_para_ptr = ref.refType(dtp_para);
 var player_status = {
     PLAYER_STATUS_INVALID:       -1,
     PLAYER_STATUS_IDLE:           0,
-    
+
     PLAYER_STATUS_INIT_ENTER:     1,
     PLAYER_STATUS_INIT_EXIT:      2,
 
     PLAYER_STATUS_PREPARE_START:  3,
     PLAYER_STATUS_PREPARED:       4,
-    
+
     PLAYER_STATUS_START:          5,
     PLAYER_STATUS_RUNNING:        6,
 
@@ -77,13 +77,13 @@ var player_status = {
 var canvas_vo = {
     id:1000,
     name:'canvas render',
-    vo_init:function(){
+    vo_init:function(p){
         console.log('yeah, canvas init ok');
     },
-    vo_stop:function(){
+    vo_stop:function(p){
         console.log('yeah, canvas stop ok');
     },
-    vo_render:function(pic){
+    vo_render:function(p, pic){
         var picture = pic.deref();
         var data = picture.data0;
 		var rgb_data = data.reinterpret(720*480*3)
@@ -152,7 +152,7 @@ var para = new dtp_para;
 para.file_name = url;
 para.disable_audio = no_audio;
 para.disable_video = no_video;
-para.video_pixel_format = 1; // rgb vpf
+para.video_pixel_format = 2; // rgb24 vpf
 para.width = width;
 para.height = height;
 para.update_cb = dtp_cb;
