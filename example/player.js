@@ -39,6 +39,7 @@ var dtp_para = Struct(
     disable_hw_acodec:'int',
     disable_hw_vcodec:'int',
     disable_hw_scodec:'int',
+    video_pixel_format:'int',
     width:'int',
     height:'int',
     cookie:voidptr,
@@ -151,6 +152,7 @@ var para = new dtp_para;
 para.file_name = url;
 para.disable_audio = no_audio;
 para.disable_video = no_video;
+para.video_pixel_format = 1; // rgb vpf
 para.width = width;
 para.height = height;
 para.update_cb = dtp_cb;
